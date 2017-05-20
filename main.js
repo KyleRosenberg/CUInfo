@@ -1,50 +1,55 @@
 var socket;
 var username;
 var password;
+//var ip = 'ws://localhost:1337';
+var ip = 'ws://104.197.171.2:1337';
 
 function submitForm(){
     var em = document.getElementById("email");
     var pw = document.getElementById("password");
     $("#loginload").removeClass("hidden");
-    socket= new WebSocket('ws://104.197.171.2:1337');
+    socket= new WebSocket(ip);
     username = em.value;
     password = pw.value;
     socket.onopen= function() {
         getInfoForSession(username, password, "Fall 2017");
     };
-    socket.onmessage= function(s) {
-        if (s.data instanceof Blob){
-            reader = new FileReader()
-            reader.onload = () => {
-                var res = JSON.parse(reader.result);
-                if ("error" in res){
-                    $("#fail").text(res["error"]);
-                    $("#fail").removeClass("hidden");
-                    socket.close();
-                } else {
-                    $("#fail").addClass("hidden");
-                    $("#login").css("display", "none");
-                    $("#info").css("display", "");
-                    for (var i = 0; i<res.length; i++){
-                        var clss = res[i];
-                        var classInfo = `<td>${clss["name"]} (${clss["type"]})<br />${clss["department"]} ${clss["classCode"]}-${clss["section"]}</td>`;
-                        var timeInfo = `<td>${clss["days"]}<br />${clss["startTime"]}-${clss["endTime"]}</td>`;
-                        var inst = clss["instructor"];
-                        var instructorInfo = `<td>${inst["firstName"]} ${inst["lastName"]}</td>`;
-                        var creditInfo = `<td>${clss["credits"]}</td>`;
-                        var statusInfo = `<td>${clss["status"]}</td>`;
-                        if (clss["grade"]==undefined){
-                            clss["grade"] = "";
-                        }
-                        var gradeInfo = `<td>${clss["grade"]}</td>`;
-                        $("#table tbody").append("<tr>" + classInfo + timeInfo + instructorInfo + creditInfo + statusInfo + gradeInfo + "</tr>");
+    socket.onmessage= receiveMessage;
+}
+
+function receiveMessage(s){
+    if (s.data instanceof Blob){
+        reader = new FileReader()
+        reader.onload = () => {
+            var res = JSON.parse(reader.result);
+            if ("error" in res){
+                $("#fail").text(res["error"]);
+                $("#fail").removeClass("hidden");
+                socket.close();
+            } else {
+                $("#fail").addClass("hidden");
+                $("#login").css("display", "none");
+                $("#info").css("display", "");
+                for (var i = 0; i<res.length; i++){
+                    var clss = res[i];
+                    var classInfo = `<td>${clss["name"]} (${clss["type"]})<br />${clss["department"]} ${clss["classCode"]}-${clss["section"]}</td>`;
+                    var timeInfo = `<td>${clss["days"]}<br />${clss["startTime"]}-${clss["endTime"]}</td>`;
+                    var inst = clss["instructor"];
+                    var instructorInfo = `<td>${inst["firstName"]} ${inst["lastName"]}</td>`;
+                    var creditInfo = `<td>${clss["credits"]}</td>`;
+                    var statusInfo = `<td>${clss["status"]}</td>`;
+                    if (clss["grade"]==undefined){
+                        clss["grade"] = "";
                     }
-                    $("#selectsesh").removeClass("active");
+                    var gradeInfo = `<td>${clss["grade"]}</td>`;
+                    $("#table tbody").append("<tr>" + classInfo + timeInfo + instructorInfo + creditInfo + statusInfo + gradeInfo + "</tr>");
                 }
+                $("#selectsesh").removeClass("active");
             }
-            reader.readAsText(s.data);
+            socket.close();
         }
-    };
+        reader.readAsText(s.data);
+    }
 }
 
 function getInfoForSession(un, pw, ss){
@@ -60,7 +65,11 @@ window.onload = function(){
         onChange:function(){
             $("#table tbody tr").remove();
             $("#selectsesh").addClass("active");
-            getInfoForSession(username, password, document.getElementById("session").value);
+            socket= new WebSocket(ip);
+            socket.onopen= function() {
+                getInfoForSession(username, password, document.getElementById("session").value.toString());
+            }
+            socket.onmessage= receiveMessage;
         }
     });
     document.getElementById("password").onkeydown = function(){
