@@ -1,0 +1,92 @@
+<html>
+
+<head>
+    <title>CU Info</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
+    <script src="main.js"></script>
+</head>
+
+<body>
+    <div id="login" style="text-align:center;display:">
+        <h2 class="ui center aligned icon header">
+          <i class="student icon"></i>
+          CU Info
+        </h2>
+        <div class="ui grid">
+            <div class="row"></div>
+            <div class="two wide column"></div>
+            <div class="twelve wide column">
+                <div class="field">
+                    <div class="ui large fluid input">
+                        <input id="email" type="text" placeholder="Identikey Username" value="">
+                    </div><br />
+                  </div>
+            </div>
+            <div class="two wide column"></div>
+            <div class="two wide column"></div>
+            <div class="twelve wide column">
+                  <div class="field">
+                    <div class="ui large fluid input">
+                         <input id="password" type="password" placeholder="Identikey Password" value="">
+                    </div>
+                    <div id="fail" class="ui hidden pointing red basic label">
+                        Email or password is incorrect...
+                    </div>
+                  </div>
+            </div>
+            <div class="two wide column"></div>
+            <div class="six wide column"></div>
+            <div class="four wide column">
+                <div class="ui fluid buttons">
+                    <button id="signin" class="ui fluid yellow button">Sign In</button>
+                </div>
+            </div>
+            <div class="six wide column"></div>
+            <div class="row"></div>
+            <div class="two wide column"></div>
+            <div class="twelve wide column">
+                <div class="ui active inverted dimmer">
+                    <div id="loginload" class="ui hidden centered loader"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="info" style="display:none">
+        <h1></h1>
+        <div class="ui selection dropdown">
+            <input type="hidden" id="session" value="Fall 2017">
+            <i class="dropdown icon"></i>
+            <div class="default text"></div>
+            <div class="menu">
+                <div class="item" data-value="Spring 2018">Spring 2018</div>
+                <div class="item" data-value="Fall 2017">Fall 2017</div>
+                <div class="item" data-value="Summer 2017">Summer 2017</div>
+                <div class="item" data-value="Spring 2017">Spring 2017</div>
+            </div>
+        </div>
+        <table style="text-align:center" id="table" class="ui celled structured table">
+            <thead>
+                <tr>
+                    <th rowspan="2">Course</th>
+                    <th rowspan="2">Times</th>
+                    <th rowspan="2">Instructor</th>
+                    <th colspan="3">Other</th>
+                </tr>
+                <tr>
+                    <th>Credits</th>
+                    <th>Status</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div id="selectsesh" class="ui dimmer">
+            <div class="ui centered loader"></div>
+        </div>
+    </div>
+</body>
+
+</html>
