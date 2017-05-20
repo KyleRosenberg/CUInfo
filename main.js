@@ -1,7 +1,7 @@
 var socket;
 var username;
 var password;
-//var ip = 'ws://localhost:1337';
+//var ip = 'wss://localhost:1337';
 var ip = 'ws://104.197.171.2:1337';
 
 function submitForm(){
@@ -20,7 +20,7 @@ function submitForm(){
 function receiveMessage(s){
     if (s.data instanceof Blob){
         reader = new FileReader()
-        reader.onload = () => {
+        reader.onload = function(){
             var res = JSON.parse(reader.result);
             if ("error" in res){
                 $("#fail").text(res["error"]);
